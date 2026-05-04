@@ -7,7 +7,7 @@ pipeline {
         ECR_REPO = "flask-eks-app1"
         IMAGE_TAG = "${BUILD_NUMBER}"
 
-        GITOPS_REPO = "https://github.com/Arunkumar230296/gitops-helm-app1.git"
+        GITHUB_CREDS = credentials('github-creds')
         ECR_URL = "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${ECR_REPO}"
     }
 
@@ -35,7 +35,7 @@ pipeline {
             steps {
                 sh """
                 rm -rf gitops-helm-app1
-                git clone ${GITOPS_REPO}
+                git clone https://${GITHUB_CREDS_USR}:${GITHUB_CREDS_PSW}@github.com/Arunkumar230296/gitops-helm-app1.git
 
                 cd gitops-helm-app1/flask-app
                 sed -i 's/tag: .*/tag: "${IMAGE_TAG}"/' values.yaml
